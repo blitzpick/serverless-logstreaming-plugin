@@ -1,15 +1,15 @@
 {
-  "name": "logStreaming",
+  "name": "serverless-logstreaming-plugin",
   "version": "0.1.0",
   "engines": {
     "node": ">=4.0"
   },
-  "description": "Serverless plugin",
-  "author": "serverless.com",
+  "description": "Serverless Log Streaming plugin - automatically send your Lambdas' logs to a lambda function of your choosing",
+  "author": "dacarley",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "http://github.com/"
+    "url": "http://github.com/blitzpick/serverless-logstreaming-plugin"
   },
   "keywords": [
     "serverless framework plugin",
@@ -21,7 +21,10 @@
     "aws lambda",
     "amazon",
     "amazon web services",
-    "serverless.com"
+    "serverless.com",
+    "logentries",
+    "Log Entries",
+    "logs"
   ],
   "main": "index.js",
   "bin": {},
