@@ -101,16 +101,19 @@ function configureLogging(project, aws, functionNames, options) {
             return addLogStreamingPermissions(aws, options, loggingFunctionName, awsAccountId);
         })
         .then(() => {
-            const functionNamesToConfigure = _.without(functionNames, loggingFunctionName);
+            const logGroupNames = _(functionNames)
+                .without(loggingFunctionName)
+                .map(functionName => `/aws/lambda/${functionName}`)
+                .value();
 
-            const promises = _.map(functionNamesToConfigure, functionName => {
-                const logGroupName = `/aws/lambda/${functionName}`;
-
-                return createLogGroup(aws, logGroupName, options)
+            let promise = Promise.resolve();
+            _.each(logGroupNames, logGroupName => {
+                promise = promise
+                    .then(() => createLogGroup(aws, logGroupName, options))
                     .then(() => setLogGroupStreaming(aws, logGroupName, loggingFunctionName, awsAccountId, options));
             });
 
-            return Promise.all(promises);
+            return promise;
         });
 }
 
