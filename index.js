@@ -157,7 +157,6 @@ function removeLogStreamingPermissions(aws, options, loggingFunctionName, awsAcc
     const params = {
         FunctionName: arn,
         StatementId: loggingFunctionName,
-        Qualifier: options.stage
     };
 
     return aws.request("Lambda", "removePermission", params, options.stage, options.region)
@@ -172,7 +171,6 @@ function addLogStreamingPermissions(aws, options, loggingFunctionName, awsAccoun
         StatementId: loggingFunctionName,
         Action: "lambda:InvokeFunction",
         Principal: `logs.${options.region}.amazonaws.com`,
-        Qualifier: options.stage
     };
 
     return aws.request("Lambda", "addPermission", params, options.stage, options.region);
