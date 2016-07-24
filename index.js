@@ -7,7 +7,7 @@ module.exports = S => {
     class PluginBoilerplate extends S.classes.Plugin {
         constructor() {
             super();
-            this.name = "logEntries";
+            this.name = "LogStreaming";
         }
 
         registerActions() {
@@ -91,6 +91,12 @@ module.exports = S => {
     return PluginBoilerplate;
 };
 
+function delay(ms) {
+    return new Promise(resolve => {
+        setTimeout(resolve, ms);
+    });
+}
+
 function configureLogging(project, aws, functionNames, options) {
     const awsAccountId = aws.getAccountId(options.stage, options.region);
 
@@ -110,7 +116,9 @@ function configureLogging(project, aws, functionNames, options) {
             _.each(logGroupNames, logGroupName => {
                 promise = promise
                     .then(() => createLogGroup(aws, logGroupName, options))
-                    .then(() => setLogGroupStreaming(aws, logGroupName, loggingFunctionName, awsAccountId, options));
+                    .then(() => delay(50)) // Ensure we don't blow through the API throttling rate
+                    .then(() => setLogGroupStreaming(aws, logGroupName, loggingFunctionName, awsAccountId, options))
+                    .then(() => delay(50)); // Ensure we don't blow through the API throttling rate
             });
 
             return promise;
@@ -156,7 +164,7 @@ function removeLogStreamingPermissions(aws, options, loggingFunctionName, awsAcc
 
     const params = {
         FunctionName: arn,
-        StatementId: loggingFunctionName,
+        StatementId: loggingFunctionName
     };
 
     return aws.request("Lambda", "removePermission", params, options.stage, options.region)
@@ -170,7 +178,7 @@ function addLogStreamingPermissions(aws, options, loggingFunctionName, awsAccoun
         FunctionName: arn,
         StatementId: loggingFunctionName,
         Action: "lambda:InvokeFunction",
-        Principal: `logs.${options.region}.amazonaws.com`,
+        Principal: `logs.${options.region}.amazonaws.com`
     };
 
     return aws.request("Lambda", "addPermission", params, options.stage, options.region);

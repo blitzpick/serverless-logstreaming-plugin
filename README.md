@@ -3,7 +3,7 @@ Serverless Log Streaming Plugin
 
 This plugin will automatically configure your CloudWatch logs to stream to one of the Lambda functions in your project.
 
-This plugin was motivated by a desire to consolidate CloudWatch logs in a service like LogEntries.  However, by Streaming
+This plugin was motivated by a desire to consolidate CloudWatch logs in a service like Loggly.  However, by Streaming
 your logs to a lambda, you can do any sort of aggregation or metrics on your logs you'd like.
 
 **Note:** Requires Serverless *v0.5.0*.
@@ -16,7 +16,7 @@ The plugin requires a custom setting in s-project.json
 {
   "custom": {
     "logStreaming": {
-        "functionName": "logEntries"
+        "functionName": "logStreaming"
     }
   }
 }
