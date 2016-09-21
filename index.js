@@ -4,7 +4,7 @@
 const _ = require("lodash");
 
 module.exports = S => {
-    class PluginBoilerplate extends S.classes.Plugin {
+    class LogStreamingPlugin extends S.classes.Plugin {
         constructor() {
             super();
             this.name = "LogStreaming";
@@ -88,7 +88,7 @@ module.exports = S => {
     }
 
     // Export Plugin Class
-    return PluginBoilerplate;
+    return LogStreamingPlugin;
 };
 
 function delay(ms) {
@@ -103,9 +103,11 @@ function configureLogging(project, aws, functionNames, options) {
     const loggingFunctionName = getLoggingFunctionName(project, options);
 
     return removeLogStreamingPermissions(aws, options, loggingFunctionName, awsAccountId)
+        .then(() => delay(1000)) // Give lambda a moment to realize the change.
         .then(() => {
             return addLogStreamingPermissions(aws, options, loggingFunctionName, awsAccountId);
         })
+        .then(() => delay(1000)) // Give lambda a moment to realize the change.
         .then(() => {
             const logGroupNames = _(functionNames)
                 .without(loggingFunctionName)
