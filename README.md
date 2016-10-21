@@ -22,6 +22,10 @@ The plugin requires a custom setting in s-project.json
 }
 ```
 
+This will be a reference to the function you'll write to receive the log streams.  This function will be deployed just like any other
+in your project.  The `serverless-logstreaming-plugin` will configure the CloudWatch logs for all of your other functions to stream
+log events to this function.
+
 It is also possible to specify optional "external" setting (bool value), to point that functionName is outside of current Serverless project (but in the same AWS account, stage and region):
 
 ```javascript
@@ -34,10 +38,6 @@ It is also possible to specify optional "external" setting (bool value), to poin
   }
 }
 ```
-
-This will be a reference to the function you'll write to receive the log streams.  This function will be deployed just like any other
-in your project.  The `serverless-logstreaming-plugin` will configure the CloudWatch logs for all of your other functions to stream
-log events to this function.
 
 Your log streaming function will receive events that are shaped like this:
 
