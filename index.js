@@ -158,7 +158,12 @@ function getLoggingFunctionName(project, options) {
         throw new Error("The function name must be specified in s-project.json, under custom.logStreaming.functionName");
     }
 
-    return project.getFunction(project.custom.logStreaming.functionName).getDeployedName(options);
+    if (project.custom.logStreaming.external && project.custom.logStreaming.external === true) {
+        return project.custom.logStreaming.functionName;
+    }
+    else {
+        return project.getFunction(project.custom.logStreaming.functionName).getDeployedName(options);
+    }
 }
 
 function removeLogStreamingPermissions(aws, options, loggingFunctionName, awsAccountId) {
